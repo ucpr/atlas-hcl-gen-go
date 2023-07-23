@@ -5,10 +5,10 @@ table "users" {
   column "name" {
     type = int
   }
-  column "updatedAt" {
+  column "updated_at" {
     type = int
   }
-  column "createdAt" {
+  column "created_at" {
     type = int
   }
 }
