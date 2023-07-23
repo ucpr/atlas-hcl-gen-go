@@ -7,7 +7,7 @@ This is a command to generate Go struct from [Atlas HCL Schema](https://atlasgo.
 Install the command.
 
 ```sh
-go install -u github.com/ucpr/atlas-hcl-gen-go
+go install github.com/ucpr/atlas-hcl-gen-go
 ```
 
 Generate Go struct from Atlas HCL Schema.
