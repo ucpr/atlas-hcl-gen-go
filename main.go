@@ -67,7 +67,7 @@ func run() error {
 		fmt.Fprintf(buf, "}\n\n")
 	}
 
-	pb, err := imports.Process("outpath", buf.Bytes(), nil)
+	pb, err := imports.Process(outPath, buf.Bytes(), nil)
 	if err != nil {
 		return fmt.Errorf("failed to format: %w", err)
 	}
