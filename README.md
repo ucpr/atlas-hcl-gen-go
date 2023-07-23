@@ -2,6 +2,9 @@
 
 This is a command to generate Go struct from [Atlas HCL Schema](https://atlasgo.io/atlas-schema/hcl).
 
+⚠️ This project is experimental and under development. Destructive changes may occur without notice.  
+However, contributions are welcome, so please feel free to make suggestions.
+
 ## Usage
 
 Install the command.
