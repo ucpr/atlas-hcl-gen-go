@@ -44,8 +44,14 @@ func run() error {
 		return err
 	}
 
-	var s schema.Schema
+	// TOOD: Support other evaluators
+	// evaluator switches the evaluation of HCL schema for each DB(eg. MySQL, PostgreSQL),
+	// but there are differences in the supported types of schema,
+	// so it should be possible to change the schema.
+	// ref. https://atlasgo.io/atlas-schema/hcl-types
 	ev := mysql.EvalHCL
+
+	var s schema.Schema
 	if err := hclBytesFunc(ev)(b, &s, nil); err != nil {
 		return err
 	}
