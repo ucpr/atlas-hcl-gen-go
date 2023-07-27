@@ -68,7 +68,7 @@ func run() error {
 		for j := range table.Columns {
 			column := table.Columns[j]
 			tp := toGoTypeString(column.Type)
-			fmt.Fprintf(buf, "\t%s\t%s\t`json:\"%s\"`\n", toCamelCase(column.Name), tp, column.Name)
+			fmt.Fprintf(buf, "\t%s\t%s\t`db:\"%s\"`\n", toCamelCase(column.Name), tp, column.Name)
 		}
 		fmt.Fprintf(buf, "}\n\n")
 	}
