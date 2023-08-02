@@ -5,7 +5,7 @@ go 1.20
 require (
 	ariga.io/atlas v0.12.1
 	github.com/hashicorp/hcl/v2 v2.17.0
-	github.com/stretchr/testify v1.7.1-0.20210427113832-6241f9ab9942
+	github.com/stretchr/testify v1.8.4
 	github.com/zclconf/go-cty v1.13.2
 	golang.org/x/tools v0.11.0
 )
@@ -21,5 +21,5 @@ require (
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/sys v0.10.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
