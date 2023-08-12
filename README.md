@@ -43,7 +43,7 @@ table "users" {
 Execute the command.
 
 ```sh
-atlas-hcl-gen-go -f schema.hcl -o output.go
+atlas-hcl-gen-go -i schema.hcl -o output.go
 ```
 
 The following Go struct will be generated.

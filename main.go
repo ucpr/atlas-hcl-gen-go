@@ -35,7 +35,7 @@ func main() {
 
 func run() error {
 	var hclPath, outPath, pkg string
-	flag.StringVar(&hclPath, "f", "", "input file path")
+	flag.StringVar(&hclPath, "i", "", "input file path")
 	flag.StringVar(&outPath, "o", "", "output file path")
 	flag.StringVar(&pkg, "package", "main", "package name")
 	flag.Parse()
