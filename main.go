@@ -94,6 +94,7 @@ func run() error {
 
 func toGoTypeString(ct *schema.ColumnType) string {
 	// TODO: support more types
+	// https://atlasgo.io/atlas-schema/hcl-types
 	switch ct.Type.(type) {
 	case *schema.IntegerType:
 		return "int"
@@ -101,6 +102,14 @@ func toGoTypeString(ct *schema.ColumnType) string {
 		return "float"
 	case *schema.StringType:
 		return "string"
+	case *schema.BoolType:
+		return "bool"
+	case *schema.TimeType:
+		return "time.Time"
+	case *schema.EnumType:
+		return "string"
+	case *schema.BinaryType, *schema.JSONType:
+		return "[]byte"
 	}
 	return "any"
 }
