@@ -66,6 +66,7 @@ type Users struct {
 ## TODO
 
 - [ ] Support some types
+- [ ] Support some RDBMS schemas (MySQL, PostgreSQL, SQLite, ...)
 - [ ] Add tests
 - [ ] ...
 
