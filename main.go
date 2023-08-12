@@ -11,7 +11,9 @@ import (
 
 	"ariga.io/atlas/schemahcl"
 	"ariga.io/atlas/sql/mysql"
+	"ariga.io/atlas/sql/postgres"
 	"ariga.io/atlas/sql/schema"
+	"ariga.io/atlas/sql/sqlite"
 	"github.com/hashicorp/hcl/v2/hclparse"
 	"github.com/zclconf/go-cty/cty"
 	"golang.org/x/tools/imports"
@@ -34,9 +36,10 @@ func main() {
 }
 
 func run() error {
-	var hclPath, outPath, pkg string
+	var hclPath, outPath, target, pkg string
 	flag.StringVar(&hclPath, "i", "", "input file path")
 	flag.StringVar(&outPath, "o", "", "output file path")
+	flag.StringVar(&target, "t", "mysql", "target database")
 	flag.StringVar(&pkg, "package", "main", "package name")
 	flag.Parse()
 
@@ -45,13 +48,10 @@ func run() error {
 		return err
 	}
 
-	// TOOD: Support other evaluators
-	// evaluator switches the evaluation of HCL schema for each DB(eg. MySQL, PostgreSQL),
-	// but there are differences in the supported types of schema,
-	// so it should be possible to change the schema.
-	// ref. https://atlasgo.io/atlas-schema/hcl-types
-	ev := mysql.EvalHCL
-
+	ev, err := toSchemaEvaluatorFunc(strings.ToLower(target))
+	if err != nil {
+		return err
+	}
 	var s schema.Schema
 	if err := hclBytesFunc(ev)(b, &s, nil); err != nil {
 		return err
@@ -90,6 +90,18 @@ func run() error {
 	}
 
 	return nil
+}
+
+func toSchemaEvaluatorFunc(target string) (schemahcl.EvalFunc, error) {
+	switch target {
+	case "mysql":
+		return mysql.EvalHCL, nil
+	case "postgres", "postgresql":
+		return postgres.EvalHCL, nil
+	case "sqlite":
+		return sqlite.EvalHCL, nil
+	}
+	return nil, fmt.Errorf("unsupported target database: %s", target)
 }
 
 func toGoTypeString(ct *schema.ColumnType) string {
