@@ -3,7 +3,7 @@ module github.com/ucpr/atlas-hcl-gen-go
 go 1.20
 
 require (
-	ariga.io/atlas v0.13.2
+	ariga.io/atlas v0.14.0
 	github.com/hashicorp/hcl/v2 v2.18.0
 	github.com/stretchr/testify v1.8.4
 	github.com/zclconf/go-cty v1.14.0
