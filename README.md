@@ -64,8 +64,6 @@ type Users struct {
 
 - [ ] Support some types
 - [x] Support some RDBMS schemas (MySQL, PostgreSQL, SQLite, ...)
-- [ ] Add tests
-- [ ] ...
 
 ## Contributing
 
