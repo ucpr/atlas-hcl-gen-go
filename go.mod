@@ -5,7 +5,7 @@ go 1.20
 require (
 	ariga.io/atlas v0.14.2
 	github.com/hashicorp/hcl/v2 v2.20.0
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 	github.com/zclconf/go-cty v1.14.3
 	golang.org/x/tools v0.18.0
 )
