@@ -14,6 +14,7 @@ type input struct {
 	hclPath string
 	outPath string
 	pkg     string
+	tag     string
 }
 
 func generate(s schema.Schema, in input) ([]byte, error) {
@@ -29,7 +30,7 @@ func generate(s schema.Schema, in input) ([]byte, error) {
 		for j := range table.Columns {
 			column := table.Columns[j]
 			tp := toGoTypeString(column.Type)
-			fmt.Fprintf(buf, "\t%s\t%s\t`db:\"%s\"`\n", toCamelCase(column.Name), tp, column.Name)
+			fmt.Fprintf(buf, "\t%s\t%s\t`%s:\"%s\"`\n", toCamelCase(column.Name), tp, in.tag, column.Name)
 		}
 		fmt.Fprintf(buf, "}\n\n")
 	}

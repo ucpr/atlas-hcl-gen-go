@@ -27,10 +27,11 @@ func main() {
 }
 
 func run() error {
-	var hclPath, outPath, target, pkg string
+	var hclPath, outPath, target, tag, pkg string
 	flag.StringVar(&hclPath, "i", "", "input file path")
 	flag.StringVar(&outPath, "o", "", "output file path")
 	flag.StringVar(&target, "t", "mysql", "target database")
+	flag.StringVar(&tag, "tag", "db", "tag name")
 	flag.StringVar(&pkg, "package", "main", "package name")
 	flag.Parse()
 
@@ -54,6 +55,7 @@ func run() error {
 		hclPath: hclPath,
 		outPath: outPath,
 		pkg:     pkg,
+		tag:     tag,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to generate: %w", err)
