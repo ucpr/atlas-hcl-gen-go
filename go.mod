@@ -7,7 +7,7 @@ require (
 	github.com/hashicorp/hcl/v2 v2.20.1
 	github.com/stretchr/testify v1.9.0
 	github.com/zclconf/go-cty v1.14.4
-	golang.org/x/tools v0.20.0
+	golang.org/x/tools v0.21.0
 )
 
 require (
