@@ -6,7 +6,7 @@ require (
 	ariga.io/atlas v0.21.1
 	github.com/hashicorp/hcl/v2 v2.20.1
 	github.com/stretchr/testify v1.9.0
-	github.com/zclconf/go-cty v1.14.4
+	github.com/zclconf/go-cty v1.16.1
 	golang.org/x/tools v0.20.0
 )
 
