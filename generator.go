@@ -29,7 +29,7 @@ func generate(s schema.Schema, in input) ([]byte, error) {
 		fmt.Fprintf(buf, "type %s struct {\n", toCamelCase(table.Name))
 		for j := range table.Columns {
 			column := table.Columns[j]
-			tp := toGoTypeString(column.Type)
+			tp := goTypeForColumn(column)
 			fmt.Fprintf(buf, "\t%s\t%s\t`%s:\"%s\"`\n", toCamelCase(column.Name), tp, in.tag, column.Name)
 		}
 		fmt.Fprintf(buf, "}\n\n")
