@@ -62,6 +62,6 @@ enum: string
 ## split_per_table: emit one file per table
 ## accepted: true | false (default: false)
 ## When true, -o is treated as a directory; each table generates
-## <snake_table>.go in that directory. Named enums (enum: named)
+## <snake_table>.gen.go in that directory. Named enums (enum: named)
 ## are emitted in the table file that declares the enum column(s).
 split_per_table: false

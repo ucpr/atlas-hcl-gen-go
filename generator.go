@@ -176,8 +176,8 @@ func generatePerTable(s schema.Schema, in input, outDir string) (map[string][]by
         }
         fmt.Fprintf(buf, "}\n\n")
 
-        // File name: <snake_case(table)>.go under outDir
-        base := snakeFromCamel(toCamelCase(table.Name)) + ".go"
+        // File name: <snake_case(table)>.gen.go under outDir
+        base := snakeFromCamel(toCamelCase(table.Name)) + ".gen.go"
         fp := filepath.Join(outDir, base)
         pb, err := imports.Process(fp, buf.Bytes(), nil)
         if err != nil {

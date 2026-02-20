@@ -131,12 +131,12 @@ func Test_generatePerTable_Simple(t *testing.T) {
 
 	// Expect 2 files
 	assert.Len(t, m, 2)
-	_, okUsers := m[filepath.Join(outDir, "users.go")]
-	_, okPosts := m[filepath.Join(outDir, "posts.go")]
+    _, okUsers := m[filepath.Join(outDir, "users.gen.go")]
+    _, okPosts := m[filepath.Join(outDir, "posts.gen.go")]
 	assert.True(t, okUsers)
 	assert.True(t, okPosts)
 
 	// Sanity: content should contain respective struct names
-	assert.Contains(t, string(m[filepath.Join(outDir, "users.go")]), "type Users struct")
-	assert.Contains(t, string(m[filepath.Join(outDir, "posts.go")]), "type Posts struct")
+    assert.Contains(t, string(m[filepath.Join(outDir, "users.gen.go")]), "type Users struct")
+    assert.Contains(t, string(m[filepath.Join(outDir, "posts.gen.go")]), "type Posts struct")
 }

@@ -88,7 +88,7 @@ atlas-hcl-gen-go -i schema.hcl -o output.go --config atlas-hcl-gen-go.yaml
   - Approximate when width metadata is unavailable; may over-match.
 - enum: ENUM mapping (`string`|`named`)
 - split_per_table: emit one file per table (bool; default false)
-  - When true, `-o` is treated as a directory. Output files are named `<snake_table>.go` (e.g., `users.go`).
+  - When true, `-o` is treated as a directory. Output files are named `<snake_table>.gen.go` (e.g., `users.gen.go`).
 
 ### ENUM: named type + consts
 
@@ -120,7 +120,7 @@ Per-table split example:
 ```bash
 mkdir -p out
 atlas-hcl-gen-go -i schema.hcl -o out --config atlas-hcl-gen-go.yaml
-# with split_per_table: true, writes files like out/users.go, out/posts.go
+# with split_per_table: true, writes files like out/users.gen.go, out/posts.gen.go
 ```
 
 - Directories: the specified output directory is created automatically if it does not exist.
