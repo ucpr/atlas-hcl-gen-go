@@ -162,14 +162,18 @@ func baseGoType(ct *schema.ColumnType, conf Config, dialect string) (string, boo
 
 // applyNullPolicy wraps base type according to nullability and configuration.
 func applyNullPolicy(base string, isNullable bool, conf Config) string {
-	if !isNullable {
-		return base
-	}
+    if !isNullable {
+        return base
+    }
 	// Slices are kept as-is (e.g., []byte), and json.RawMessage too.
 	if strings.HasPrefix(base, "[]") || base == "json.RawMessage" {
 		return base
 	}
-	switch strings.ToLower(conf.Null) {
+    mode := conf.Null
+    if mode == "" {
+        mode = conf.NullPolicy
+    }
+    switch strings.ToLower(mode) {
 	case "pointer":
 		return "*" + base
 	case "sqlnull":

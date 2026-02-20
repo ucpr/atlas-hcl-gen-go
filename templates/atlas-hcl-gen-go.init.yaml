@@ -17,12 +17,12 @@ package: model
 ## tag: struct tag key used for column names (e.g., `db:"col"`)
 tag: db
 
-## null: nullability strategy for columns
+## null_policy: nullability strategy for columns
 ## accepted: smart | pointer | sqlnull
 ## - smart: NOT NULL => T, NULLABLE => *T (default)
 ## - pointer: always *T (for all columns)
 ## - sqlnull: use sql.Null* for basic types (string/bool/numeric/time)
-null: smart
+null_policy: smart
 
 ## decimal: Go type mapping for DECIMAL/NUMERIC
 ## accepted: string | big.Rat

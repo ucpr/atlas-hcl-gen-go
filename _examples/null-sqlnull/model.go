@@ -4,11 +4,11 @@
 
 package model
 
-import "time"
+import "database/sql"
 
 type Profiles struct {
-	Nickname *string    `db:"nickname"`
-	Age      *int       `db:"age"`
-	Verified *bool      `db:"verified"`
-	SignedAt *time.Time `db:"signed_at"`
+	Nickname sql.NullString `db:"nickname"`
+	Age      sql.NullInt64  `db:"age"`
+	Verified sql.NullBool   `db:"verified"`
+	SignedAt sql.NullTime   `db:"signed_at"`
 }

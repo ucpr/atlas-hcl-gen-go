@@ -20,7 +20,7 @@ type Users struct {
 }
 
 type Posts struct {
-	Id          any             `db:"id"`
+	Id          int             `db:"id"`
 	Title       string          `db:"title"`
 	Slug        string          `db:"slug"`
 	Status      string          `db:"status"`
@@ -34,7 +34,7 @@ type Posts struct {
 }
 
 type Comments struct {
-	Id        any       `db:"id"`
+	Id        int       `db:"id"`
 	PostId    int       `db:"post_id"`
 	AuthorId  *string   `db:"author_id"`
 	Body      string    `db:"body"`
@@ -42,7 +42,7 @@ type Comments struct {
 }
 
 type Tags struct {
-	Id   any    `db:"id"`
+	Id   int    `db:"id"`
 	Name string `db:"name"`
 }
 

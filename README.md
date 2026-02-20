@@ -77,7 +77,7 @@ atlas-hcl-gen-go -i schema.hcl -o output.go --config atlas-hcl-gen-go.yaml
 - dialect: target dialect (`mysql`|`postgres`|`sqlite`)
 - package: Go package name for generated file
 - tag: struct tag key (e.g., `db`)
-- null: null strategy (`smart`|`pointer`|`sqlnull`)
+- null_policy: null strategy (`smart`|`pointer`|`sqlnull`)
 - decimal: DECIMAL/NUMERIC mapping (`string`|`big.Rat`)
 - uuid: UUID mapping (`string`|`bytes16`)
 - json: JSON/JSONB mapping (`raw`|`bytes`|`string`)
