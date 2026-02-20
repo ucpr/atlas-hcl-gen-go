@@ -8,11 +8,4 @@ Run:
 atlas-hcl-gen-go -i schema.hcl -o model.go --config atlas-hcl-gen-go.yaml
 ```
 
-Expected (snippet):
-
-```go
-type Flags struct {
-    Enabled bool `db:"enabled"`
-}
-```
 

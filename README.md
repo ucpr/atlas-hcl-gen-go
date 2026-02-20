@@ -101,6 +101,7 @@ See `_examples/` for runnable samples:
 - null-sqlnull: use `sql.Null*` for nullable basics
 - decimal-bigrat: map DECIMAL/NUMERIC to `big.Rat`
 - strict-types: fail on unsupported or ambiguous types
+ - blog-site: realistic blog schema (users, posts, comments, tags) with enums, JSON, UUID, and nullable timestamps
 
 Run an example:
 
@@ -122,4 +123,3 @@ Issues and PRs welcome.
 ## License
 
 [MIT License](LICENSE)
-
