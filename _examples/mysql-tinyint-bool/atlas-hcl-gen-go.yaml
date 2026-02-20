@@ -1,0 +1,11 @@
+dialect: mysql
+package: model
+tag: db
+null: smart
+decimal: string
+uuid: string
+json: raw
+strict_types: false
+mysql_tinyint1_as_bool: true
+enum: string
+
