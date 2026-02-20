@@ -1,0 +1,53 @@
+# atlas-hcl-gen-go configuration
+#
+# This file defines code generation options for mapping Atlas HCL schema
+# into Go structs. Fields below include short explanations and accepted values.
+#
+# Notes
+# - Precedence: CLI flags > this config > built-in defaults
+# - Only 'dialect', 'package', and 'tag' are required at minimum.
+
+## dialect: target database dialect used to evaluate Atlas HCL and drive type mapping
+## accepted: mysql | postgres | sqlite
+dialect: postgres
+
+## package: Go package name for the generated file
+package: model
+
+## tag: struct tag key used for column names (e.g., `db:"col"`)
+tag: db
+
+## null: nullability strategy for columns
+## accepted: smart | pointer | sqlnull
+## - smart: NOT NULL => T, NULLABLE => *T (default)
+## - pointer: always *T (for all columns)
+## - sqlnull: use sql.Null* for basic types (string/bool/numeric/time)
+null: smart
+
+## decimal: Go type mapping for DECIMAL/NUMERIC
+## accepted: string | big.Rat
+## - string: textual, lossless representation (default)
+## - big.Rat: math/big.Rat for arithmetic (optional future support)
+decimal: string
+
+## uuid: Go type mapping for UUID
+## accepted: string | bytes16
+## - string: human-readable form (default)
+## - bytes16: [16]byte (optional future support)
+uuid: string
+
+## json: Go type mapping for JSON/JSONB
+## accepted: raw | bytes | string
+## - raw: json.RawMessage (alias of []byte) (default)
+## - bytes: []byte
+## - string: string
+json: raw
+
+## strict_types: error on unsupported/ambiguous database types
+## accepted: true | false (default: false)
+strict_types: false
+
+## mysql_tinyint1_as_bool: map MySQL TINYINT(1) to bool (instead of int8)
+## accepted: true | false (default: false)
+mysql_tinyint1_as_bool: false
+
