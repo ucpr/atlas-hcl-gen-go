@@ -316,12 +316,15 @@ func Test_baseGoType_and_goTypeForColumn(t *testing.T) {
 		}(),
 	}
 
+	// default config simulates postgres dialect
+	def := Config{Null: "smart", Decimal: "string", JSON: "raw", UUID: "string", Enum: "string"}
 	for _, tt := range patterns {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
-			gotBase := baseGoType(tt.col.Type)
-			gotFull := goTypeForColumn(tt.col)
+			gotBase, _ := baseGoType(tt.col.Type, def, "postgres")
+			gotFull, err := goTypeForColumn(tt.col, def, "postgres", "t")
+			assert.NoError(t, err)
 			assert.Equal(t, tt.base, gotBase)
 			assert.Equal(t, tt.full, gotFull)
 		})

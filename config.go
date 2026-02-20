@@ -20,6 +20,7 @@ type Config struct {
 	JSON                string `yaml:"json"`    // raw|bytes|string
 	StrictTypes         bool   `yaml:"strict_types"`
 	MysqlTinyint1AsBool bool   `yaml:"mysql_tinyint1_as_bool"`
+	Enum                string `yaml:"enum"` // string|named
 }
 
 func loadConfig(path string) (Config, error) {

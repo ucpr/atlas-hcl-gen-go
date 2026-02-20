@@ -15,6 +15,8 @@ type input struct {
 	outPath string
 	pkg     string
 	tag     string
+	dialect string
+	conf    Config
 }
 
 func generate(s schema.Schema, in input) ([]byte, error) {
@@ -24,12 +26,66 @@ func generate(s schema.Schema, in input) ([]byte, error) {
 	fmt.Fprintf(buf, "// source: %s\n\n", in.hclPath)
 	fmt.Fprintf(buf, "package %s\n\n", in.pkg)
 
+	// Optionally emit named enum types and consts before structs.
+	if strings.ToLower(in.conf.Enum) == "named" {
+		type enumDef struct {
+			typeName string
+			values   []string
+		}
+		enums := make([]enumDef, 0)
+		// Track seen to avoid duplicates in case of repeated columns with same name.
+		seen := make(map[string]struct{})
+		for i := range s.Tables {
+			table := s.Tables[i]
+			for j := range table.Columns {
+				col := table.Columns[j]
+				if col.Type == nil || col.Type.Type == nil {
+					continue
+				}
+				if et, ok := col.Type.Type.(*schema.EnumType); ok {
+					tn := enumTypeName(table.Name, col.Name)
+					if _, ok := seen[tn]; ok {
+						continue
+					}
+					seen[tn] = struct{}{}
+					enums = append(enums, enumDef{typeName: tn, values: et.Values})
+				}
+			}
+		}
+		for _, e := range enums {
+			fmt.Fprintf(buf, "type %s string\n\n", e.typeName)
+			if len(e.values) > 0 {
+				fmt.Fprintf(buf, "const (\n")
+				used := map[string]struct{}{}
+				for _, v := range e.values {
+					cn := e.typeName + goIdentFromString(v)
+					// ensure uniqueness
+					base := cn
+					k := 1
+					for {
+						if _, ok := used[cn]; !ok {
+							break
+						}
+						k++
+						cn = fmt.Sprintf("%s%d", base, k)
+					}
+					used[cn] = struct{}{}
+					fmt.Fprintf(buf, "\t%s %s = \"%s\"\n", cn, e.typeName, v)
+				}
+				fmt.Fprintf(buf, ")\n\n")
+			}
+		}
+	}
+
 	for i := range s.Tables {
 		table := s.Tables[i]
 		fmt.Fprintf(buf, "type %s struct {\n", toCamelCase(table.Name))
 		for j := range table.Columns {
 			column := table.Columns[j]
-			tp := goTypeForColumn(column)
+			tp, err := goTypeForColumn(column, in.conf, in.dialect, table.Name)
+			if err != nil {
+				return nil, fmt.Errorf("%s.%s: %w", table.Name, column.Name, err)
+			}
 			fmt.Fprintf(buf, "\t%s\t%s\t`%s:\"%s\"`\n", toCamelCase(column.Name), tp, in.tag, column.Name)
 		}
 		fmt.Fprintf(buf, "}\n\n")
@@ -67,4 +123,47 @@ func toCamelCase(s string) string {
 	}
 
 	return result.String()
+}
+
+// enumTypeName returns a Go type name for an enum column based on table and column names.
+func enumTypeName(tableName, columnName string) string {
+	return toCamelCase(tableName) + toCamelCase(columnName)
+}
+
+// goIdentFromString converts an arbitrary string into a valid Go identifier chunk.
+func goIdentFromString(s string) string {
+	if s == "" {
+		return "Empty"
+	}
+	// Build a CamelCase identifier preserving digits.
+	var out strings.Builder
+	upperNext := true
+	for _, r := range s {
+		isLetter := (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z')
+		isDigit := r >= '0' && r <= '9'
+		if isLetter || isDigit {
+			if upperNext && isLetter {
+				if r >= 'a' && r <= 'z' {
+					r = r - 'a' + 'A'
+				}
+				out.WriteRune(r)
+				upperNext = false
+				continue
+			}
+			out.WriteRune(r)
+			upperNext = false
+			continue
+		}
+		// separator encountered
+		upperNext = true
+	}
+	res := out.String()
+	if res == "" {
+		res = "Empty"
+	}
+	// Identifier cannot start with digit
+	if res[0] >= '0' && res[0] <= '9' {
+		res = "N" + res
+	}
+	return res
 }

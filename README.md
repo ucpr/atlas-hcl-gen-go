@@ -40,6 +40,26 @@ Use a config when generating.
 atlas-hcl-gen-go -i schema.hcl -o output.go --config atlas-hcl-gen-go.yaml
 ```
 
+## Config Options
+
+- dialect: target dialect (`mysql`|`postgres`|`sqlite`)
+- package: Go package name for generated file
+- tag: struct tag key (e.g., `db`)
+- null: null strategy (`smart`|`pointer`|`sqlnull`)
+- decimal: DECIMAL/NUMERIC mapping (`string`|`big.Rat`)
+- uuid: UUID mapping (`string`|`bytes16`)
+- json: JSON/JSONB mapping (`raw`|`bytes`|`string`)
+- strict_types: error on unsupported/ambiguous types (bool)
+- mysql_tinyint1_as_bool: map MySQL `TINYINT` to `bool` (bool)
+- enum: ENUM mapping (`string`|`named`)
+
+### ENUM: named type + consts
+
+- When `enum: named`, the generator emits a named Go type per enum column and const values.
+- Type name: `<Table><Column>` (CamelCase). Example: `UsersStatus`.
+- Const names: `<Type><ValueCamel>` with string literal assignments.
+- Struct field type becomes the named enum type; null policy applies (e.g., `*UsersStatus`).
+
 ## Example
 
 The input data uses the schema written in HCL below.

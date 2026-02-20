@@ -50,3 +50,9 @@ strict_types: false
 ## mysql_tinyint1_as_bool: map MySQL TINYINT(1) to bool (instead of int8)
 ## accepted: true | false (default: false)
 mysql_tinyint1_as_bool: false
+
+## enum: how to map ENUM types
+## accepted: string | named
+## - string: use string type (default)
+## - named: generate a named Go type per enum column and const values
+enum: string

@@ -157,6 +157,8 @@ func runGenerate(args cliArgs, setFlags map[string]bool) error {
 		outPath: args.outPath,
 		pkg:     pkg,
 		tag:     tag,
+		dialect: strings.ToLower(target),
+		conf:    conf,
 	})
 	if err != nil {
 		return fmt.Errorf("failed to generate: %w", err)
