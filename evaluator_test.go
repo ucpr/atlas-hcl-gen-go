@@ -250,7 +250,7 @@ func Test_baseGoType_and_goTypeForColumn(t *testing.T) {
 				name       string
 				col        *schema.Column
 				base, full string
-			}{"unsupported", c, "any", "any"}
+			}{"unsupported", c, "string", "string"}
 		}(),
 
 		// nullability smart: value types pointerized, slices not

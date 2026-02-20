@@ -97,7 +97,7 @@ func Test_StrictTypesAndMySQLTinyintAsBool(t *testing.T) {
 
 	// mysql tinyint(1) as bool (approximate by T name)
 	{
-		c := Config{MysqlTinyint1AsBool: true}
+		c := Config{MySQLTinyint1AsBool: true}
 		col := mk(&schema.IntegerType{T: "tinyint"}, false)
 		tp, err := goTypeForColumn(col, c, "mysql", "t")
 		assert.NoError(t, err)

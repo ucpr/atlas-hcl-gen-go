@@ -81,8 +81,10 @@ atlas-hcl-gen-go -i schema.hcl -o output.go --config atlas-hcl-gen-go.yaml
 - decimal: DECIMAL/NUMERIC mapping (`string`|`big.Rat`)
 - uuid: UUID mapping (`string`|`bytes16`)
 - json: JSON/JSONB mapping (`raw`|`bytes`|`string`)
-- strict_types: error on unsupported/ambiguous types (bool)
+- strict_types: error on unsupported/ambiguous types (bool; default true)
+  - When false, unknown types fall back to `string`.
 - mysql_tinyint1_as_bool: map MySQL `TINYINT` to `bool` (bool)
+  - Approximate when width metadata is unavailable; may over-match.
 - enum: ENUM mapping (`string`|`named`)
 
 ### ENUM: named type + consts
@@ -99,6 +101,7 @@ See `_examples/` for runnable samples:
 - enum-named: enum column with `enum: named`, emits type + consts
 - mysql-tinyint-bool: map `tinyint(1)` to `bool`
 - null-sqlnull: use `sql.Null*` for nullable basics
+  - Note: `sql.NullInt64` is used for all numeric types; very large unsigned values may not fit exactly.
 - decimal-bigrat: map DECIMAL/NUMERIC to `big.Rat`
 - strict-types: fail on unsupported or ambiguous types
  - blog-site: realistic blog schema (users, posts, comments, tags) with enums, JSON, UUID, and nullable timestamps

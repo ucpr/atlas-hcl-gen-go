@@ -100,29 +100,82 @@ func generate(s schema.Schema, in input) ([]byte, error) {
 }
 
 func toCamelCase(s string) string {
-	var result strings.Builder
-	upperNext := true
+	if s == "" {
+		return ""
+	}
+	// Known Go acronyms that should remain uppercased.
+	// Compare case-insensitively per token.
+	acronyms := map[string]struct{}{
+		"ID": {}, "URL": {}, "UUID": {}, "JSON": {}, "SQL": {},
+		"HTTP": {}, "API": {}, "IP": {}, "HTML": {}, "XML": {},
+	}
 
+	// Tokenize by non-alphanumeric characters.
+	var tokens []string
+	var cur []rune
 	for _, r := range s {
-		if !unicode.IsLetter(r) {
-			upperNext = true
+		if unicode.IsLetter(r) || unicode.IsDigit(r) {
+			cur = append(cur, r)
 			continue
 		}
-		if upperNext {
-			result.WriteRune(unicode.ToUpper(r))
-			upperNext = false
-		} else {
-			result.WriteRune(r)
+		if len(cur) > 0 {
+			tokens = append(tokens, string(cur))
+			cur = cur[:0]
 		}
 	}
-
-	// handle the first character of lower camel case
-	if len(s) > 0 && unicode.IsLower(rune(s[0])) {
-		resultString := result.String()
-		return string(unicode.ToUpper(rune(resultString[0]))) + resultString[1:]
+	if len(cur) > 0 {
+		tokens = append(tokens, string(cur))
 	}
 
-	return result.String()
+	// Build CamelCase preserving digits and uppercasing acronyms.
+	var out strings.Builder
+	for _, tok := range tokens {
+		if tok == "" {
+			continue
+		}
+		upper := strings.ToUpper(tok)
+		if _, ok := acronyms[upper]; ok {
+			out.WriteString(upper)
+			continue
+		}
+		// If token already contains an uppercase letter after the first rune,
+		// treat it as CamelCase and only ensure the first rune is uppercase.
+		hasUpperAfterFirst := false
+		for _, r := range tok[1:] {
+			if unicode.IsUpper(r) {
+				hasUpperAfterFirst = true
+				break
+			}
+		}
+		if hasUpperAfterFirst {
+			r := []rune(tok)
+			if len(r) > 0 && unicode.IsLetter(r[0]) {
+				r[0] = unicode.ToUpper(r[0])
+			}
+			out.WriteString(string(r))
+			continue
+		}
+		// Normal word: lower + capitalize first letter only (keep digits as-is).
+		lower := strings.ToLower(tok)
+		r := []rune(lower)
+		if len(r) == 0 {
+			continue
+		}
+		if unicode.IsLetter(r[0]) {
+			r[0] = unicode.ToUpper(r[0])
+		}
+		out.WriteString(string(r))
+	}
+
+	res := out.String()
+	if res == "" {
+		return ""
+	}
+	// Identifier cannot start with a digit in Go; prefix with 'N' if so.
+	if res[0] >= '0' && res[0] <= '9' {
+		res = "N" + res
+	}
+	return res
 }
 
 // enumTypeName returns a Go type name for an enum column based on table and column names.

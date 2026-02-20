@@ -81,13 +81,13 @@ func goTypeForColumn(c *schema.Column, conf Config, dialect string, tableName st
 // It returns (typeName, supported).
 func baseGoType(ct *schema.ColumnType, conf Config, dialect string) (string, bool) {
 	if ct == nil || ct.Type == nil {
-		return "any", false
+		return "string", false
 	}
 	switch t := ct.Type.(type) {
 	case *schema.IntegerType:
 		name := strings.ToLower(t.T)
 		// MySQL specific: tinyint(1) => bool (approximate by T name)
-		if dialect == "mysql" && conf.MysqlTinyint1AsBool && name == "tinyint" {
+		if dialect == "mysql" && conf.MySQLTinyint1AsBool && name == "tinyint" {
 			return "bool", true
 		}
 		var v string
@@ -153,45 +153,45 @@ func baseGoType(ct *schema.ColumnType, conf Config, dialect string) (string, boo
 		}
 	case *schema.SpatialType:
 		return "string", true
-    case *schema.UnsupportedType:
-        // Gracefully map common pseudo/alias types that may arrive as unsupported
-        // due to dialect-specific normalization.
-        name := strings.ToLower(t.T)
-        switch name {
-        case "smallserial", "serial2":
-            return "int16", true
-        case "serial", "serial4":
-            return "int", true
-        case "bigserial", "serial8":
-            return "int64", true
-        case "int2":
-            return "int16", true
-        case "int4":
-            return "int", true
-        case "int8":
-            return "int64", true
-        default:
-            return "any", false
-        }
+	case *schema.UnsupportedType:
+		// Gracefully map common pseudo/alias types that may arrive as unsupported
+		// due to dialect-specific normalization.
+		name := strings.ToLower(t.T)
+		switch name {
+		case "smallserial", "serial2":
+			return "int16", true
+		case "serial", "serial4":
+			return "int", true
+		case "bigserial", "serial8":
+			return "int64", true
+		case "int2":
+			return "int16", true
+		case "int4":
+			return "int", true
+		case "int8":
+			return "int64", true
+		default:
+			return "string", false
+		}
 	default:
-		return "any", false
+		return "string", false
 	}
 }
 
 // applyNullPolicy wraps base type according to nullability and configuration.
 func applyNullPolicy(base string, isNullable bool, conf Config) string {
-    if !isNullable {
-        return base
-    }
+	if !isNullable {
+		return base
+	}
 	// Slices are kept as-is (e.g., []byte), and json.RawMessage too.
 	if strings.HasPrefix(base, "[]") || base == "json.RawMessage" {
 		return base
 	}
-    mode := conf.Null
-    if mode == "" {
-        mode = conf.NullPolicy
-    }
-    switch strings.ToLower(mode) {
+	mode := conf.Null
+	if mode == "" {
+		mode = conf.NullPolicy
+	}
+	switch strings.ToLower(mode) {
 	case "pointer":
 		return "*" + base
 	case "sqlnull":

@@ -43,7 +43,7 @@ func Test_generate(t *testing.T) {
 package main
 
 type Users struct {
-	Id        string ` + "`" + `db:"id"` + "`" + `
+	ID        string ` + "`" + `db:"id"` + "`" + `
 	CreatedAt int    ` + "`" + `db:"created_at"` + "`" + `
 	UpdatedAt int    ` + "`" + `db:"updated_at"` + "`" + `
 }

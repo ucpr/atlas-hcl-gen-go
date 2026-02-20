@@ -44,11 +44,13 @@ uuid: string
 json: raw
 
 ## strict_types: error on unsupported/ambiguous database types
-## accepted: true | false (default: false)
-strict_types: false
+## accepted: true | false (default: true)
+## Note: When false, unknown types fall back to string.
+strict_types: true
 
 ## mysql_tinyint1_as_bool: map MySQL TINYINT(1) to bool (instead of int8)
 ## accepted: true | false (default: false)
+## Note: This is an approximation when width metadata is unavailable.
 mysql_tinyint1_as_bool: false
 
 ## enum: how to map ENUM types
