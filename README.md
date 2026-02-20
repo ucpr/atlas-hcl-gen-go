@@ -16,6 +16,12 @@ Generate Go struct from Atlas HCL Schema.
 atlas-hcl-gen-go -f schema.hcl -o output.go
 ```
 
+Print version information.
+
+```sh
+atlas-hcl-gen-go -version
+```
+
 ## Example
 
 The input data uses the schema written in HCL below.

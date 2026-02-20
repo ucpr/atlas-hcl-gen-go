@@ -28,12 +28,31 @@ func main() {
 
 func run() error {
 	var hclPath, outPath, target, tag, pkg string
+	var showVersion bool
 	flag.StringVar(&hclPath, "i", "", "input file path")
 	flag.StringVar(&outPath, "o", "", "output file path")
 	flag.StringVar(&target, "t", "mysql", "target database")
 	flag.StringVar(&tag, "tag", "db", "tag name")
 	flag.StringVar(&pkg, "package", "main", "package name")
+	flag.BoolVar(&showVersion, "version", false, "print version information and exit")
 	flag.Parse()
+
+	if showVersion {
+		v := BuildVersion
+		if v == "" {
+			v = "unknown"
+		}
+		r := BuildRevision
+		if r == "" {
+			r = "unknown"
+		}
+		ts := BuildTimestamp
+		if ts == "" {
+			ts = "unknown"
+		}
+		fmt.Printf("atlas-hcl-gen-go: \n\tversion: %s\n\trevision: %s\n\tbuilt: %s\n", v, r, ts)
+		return nil
+	}
 
 	b, err := os.ReadFile(hclPath)
 	if err != nil {

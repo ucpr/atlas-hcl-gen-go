@@ -18,6 +18,8 @@ before:
 builds:
   - env:
       - CGO_ENABLED=0
+    ldflags:
+      - -X main.BuildVersion={{ .Version }} -X main.BuildRevision={{ .ShortCommit }} -X main.BuildTimestamp={{ .Date }}
     goos:
       - linux
       - windows
