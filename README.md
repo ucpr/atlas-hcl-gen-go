@@ -13,13 +13,31 @@ go install github.com/ucpr/atlas-hcl-gen-go
 Generate Go struct from Atlas HCL Schema.
 
 ```sh
-atlas-hcl-gen-go -f schema.hcl -o output.go
+atlas-hcl-gen-go -i schema.hcl -o output.go
 ```
 
 Print version information.
 
 ```sh
 atlas-hcl-gen-go -version
+```
+
+## Init Config
+
+Initialize a config file with documented fields and accepted values.
+
+```sh
+# Writes ./atlas-hcl-gen-go.yaml (does not overwrite if exists)
+atlas-hcl-gen-go -init
+
+# Or specify a custom path
+atlas-hcl-gen-go -init --config configs/atlas-hcl-gen-go.yaml
+```
+
+Use a config when generating.
+
+```sh
+atlas-hcl-gen-go -i schema.hcl -o output.go --config atlas-hcl-gen-go.yaml
 ```
 
 ## Example

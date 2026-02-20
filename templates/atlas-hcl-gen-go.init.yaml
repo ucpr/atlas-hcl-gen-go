@@ -4,7 +4,7 @@
 # into Go structs. Fields below include short explanations and accepted values.
 #
 # Notes
-# - Precedence: CLI flags > this config > built-in defaults
+# - This config file defines how code is generated.
 # - Only 'dialect', 'package', and 'tag' are required at minimum.
 
 ## dialect: target database dialect used to evaluate Atlas HCL and drive type mapping
@@ -50,4 +50,3 @@ strict_types: false
 ## mysql_tinyint1_as_bool: map MySQL TINYINT(1) to bool (instead of int8)
 ## accepted: true | false (default: false)
 mysql_tinyint1_as_bool: false
-
