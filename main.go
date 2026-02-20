@@ -157,32 +157,61 @@ func runGenerate(args cliArgs, setFlags map[string]bool) error {
 		return err
 	}
 
-	// Generate Go code.
-	pb, err := generate(s, input{
-		hclPath: args.hclPath,
-		outPath: args.outPath,
-		pkg:     pkg,
-		tag:     tag,
-		dialect: strings.ToLower(target),
-		conf:    conf,
-	})
-	if err != nil {
-		return fmt.Errorf("failed to generate: %w", err)
-	}
+    // Generate Go code.
+    in := input{
+        hclPath: args.hclPath,
+        outPath: args.outPath,
+        pkg:     pkg,
+        tag:     tag,
+        dialect: strings.ToLower(target),
+        conf:    conf,
+    }
 
-	// Save to file (ensure directory exists).
-	if dir := filepath.Dir(args.outPath); dir != "." && dir != "" {
-		if err := os.MkdirAll(dir, 0o755); err != nil {
-			return fmt.Errorf("failed to create output dir: %w", err)
-		}
-	}
-	f, err := os.Create(args.outPath)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-	if _, err := f.Write(pb); err != nil {
-		return fmt.Errorf("failed to write file: %w", err)
-	}
-	return nil
+    if conf.SplitPerTable {
+        // Determine output directory. If -o looks like a file (.go), use its directory.
+        outDir := args.outPath
+        if outDir == "" {
+            return fmt.Errorf("output path (-o) is required")
+        }
+        if strings.HasSuffix(strings.ToLower(outDir), ".go") {
+            outDir = filepath.Dir(outDir)
+        }
+        if outDir == "." || outDir == "" {
+            outDir = "."
+        }
+        if err := os.MkdirAll(outDir, 0o755); err != nil {
+            return fmt.Errorf("failed to create output dir: %w", err)
+        }
+        files, err := generatePerTable(s, in, outDir)
+        if err != nil {
+            return fmt.Errorf("failed to generate per-table files: %w", err)
+        }
+        for fp, b := range files {
+            if err := os.WriteFile(fp, b, 0o644); err != nil {
+                return fmt.Errorf("failed to write %s: %w", fp, err)
+            }
+        }
+        return nil
+    }
+
+    pb, err := generate(s, in)
+    if err != nil {
+        return fmt.Errorf("failed to generate: %w", err)
+    }
+
+    // Save to single file (ensure directory exists).
+    if dir := filepath.Dir(args.outPath); dir != "." && dir != "" {
+        if err := os.MkdirAll(dir, 0o755); err != nil {
+            return fmt.Errorf("failed to create output dir: %w", err)
+        }
+    }
+    f, err := os.Create(args.outPath)
+    if err != nil {
+        return err
+    }
+    defer f.Close()
+    if _, err := f.Write(pb); err != nil {
+        return fmt.Errorf("failed to write file: %w", err)
+    }
+    return nil
 }

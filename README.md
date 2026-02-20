@@ -10,6 +10,7 @@ Generate Go structs from [Atlas HCL Schema](https://atlasgo.io/atlas-schema/hcl)
 - Optional named enum types + const values (`enum: named`)
 - MySQL `TINYINT(1) → bool` option
 - Strict type checking (`strict_types`)
+- Optional per-table file splitting
 
 ## Install
 
@@ -86,6 +87,8 @@ atlas-hcl-gen-go -i schema.hcl -o output.go --config atlas-hcl-gen-go.yaml
 - mysql_tinyint1_as_bool: map MySQL `TINYINT` to `bool` (bool)
   - Approximate when width metadata is unavailable; may over-match.
 - enum: ENUM mapping (`string`|`named`)
+- split_per_table: emit one file per table (bool; default false)
+  - When true, `-o` is treated as a directory. Output files are named `<snake_table>.go` (e.g., `users.go`).
 
 ### ENUM: named type + consts
 
@@ -111,6 +114,17 @@ Run an example:
 ```bash
 cd _examples/basic-postgres
 atlas-hcl-gen-go -i schema.hcl -o model.go --config atlas-hcl-gen-go.yaml
+
+Per-table split example:
+
+```bash
+mkdir -p out
+atlas-hcl-gen-go -i schema.hcl -o out --config atlas-hcl-gen-go.yaml
+# with split_per_table: true, writes files like out/users.go, out/posts.go
+```
+
+- Directories: the specified output directory is created automatically if it does not exist.
+- Overwrite: existing files with the same name are overwritten in both single-file and split modes.
 ```
 
 ## Version

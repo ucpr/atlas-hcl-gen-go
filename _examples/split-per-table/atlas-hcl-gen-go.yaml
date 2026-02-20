@@ -1,0 +1,12 @@
+dialect: postgres
+package: model
+tag: db
+null_policy: smart
+decimal: string
+uuid: string
+json: raw
+strict_types: false
+mysql_tinyint1_as_bool: false
+enum: string
+split_per_table: true
+

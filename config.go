@@ -9,21 +9,25 @@ import (
 
 // Config holds generator options loaded from YAML.
 type Config struct {
-	Dialect string `yaml:"dialect"`
-	Package string `yaml:"package"`
-	Tag     string `yaml:"tag"`
+    Dialect string `yaml:"dialect"`
+    Package string `yaml:"package"`
+    Tag     string `yaml:"tag"`
 
-	// Future options (not fully wired yet but reserved for config shape).
-	// Use NullPolicy as canonical key to avoid YAML 'null' literal ambiguity.
-	NullPolicy string `yaml:"null_policy"` // smart|pointer|sqlnull
-	// Deprecated: 'null' key in YAML. Parsed manually for compatibility.
-	Null                string `yaml:"-"`
-	Decimal             string `yaml:"decimal"` // string|big.Rat
-	UUID                string `yaml:"uuid"`    // string|bytes16
-	JSON                string `yaml:"json"`    // raw|bytes|string
-	StrictTypes         bool   `yaml:"strict_types"`
-	MySQLTinyint1AsBool bool   `yaml:"mysql_tinyint1_as_bool"`
-	Enum                string `yaml:"enum"` // string|named
+    // Future options (not fully wired yet but reserved for config shape).
+    // Use NullPolicy as canonical key to avoid YAML 'null' literal ambiguity.
+    NullPolicy string `yaml:"null_policy"` // smart|pointer|sqlnull
+    // Deprecated: 'null' key in YAML. Parsed manually for compatibility.
+    Null                string `yaml:"-"`
+    Decimal             string `yaml:"decimal"` // string|big.Rat
+    UUID                string `yaml:"uuid"`    // string|bytes16
+    JSON                string `yaml:"json"`    // raw|bytes|string
+    StrictTypes         bool   `yaml:"strict_types"`
+    MySQLTinyint1AsBool bool   `yaml:"mysql_tinyint1_as_bool"`
+    Enum                string `yaml:"enum"` // string|named
+    // SplitPerTable: when true, generate one Go file per table
+    // under the output directory. The CLI -o path is treated as a
+    // directory (or its parent directory if a file is provided).
+    SplitPerTable bool `yaml:"split_per_table"`
 }
 
 func loadConfig(path string) (Config, error) {
