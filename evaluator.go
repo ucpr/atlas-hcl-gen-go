@@ -153,8 +153,26 @@ func baseGoType(ct *schema.ColumnType, conf Config, dialect string) (string, boo
 		}
 	case *schema.SpatialType:
 		return "string", true
-	case *schema.UnsupportedType:
-		return "any", false
+    case *schema.UnsupportedType:
+        // Gracefully map common pseudo/alias types that may arrive as unsupported
+        // due to dialect-specific normalization.
+        name := strings.ToLower(t.T)
+        switch name {
+        case "smallserial", "serial2":
+            return "int16", true
+        case "serial", "serial4":
+            return "int", true
+        case "bigserial", "serial8":
+            return "int64", true
+        case "int2":
+            return "int16", true
+        case "int4":
+            return "int", true
+        case "int8":
+            return "int64", true
+        default:
+            return "any", false
+        }
 	default:
 		return "any", false
 	}
