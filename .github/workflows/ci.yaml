@@ -29,22 +29,7 @@ jobs:
           go mod verify
 
       - name: Test
-        run: make FLAGS="-coverprofile=coverage.out" test
+        run: make test
 
       - name: Build
         run: make build
-
-      - uses: jandelgado/gcov2lcov-action@v1.0.9
-        with:
-          infile: coverage.out
-          outfile: coverage.lcov
-          version: v1.0.6
-
-      - name: Report coverage to CodeClimate
-        uses: paambaati/codeclimate-action@v5.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageLocations: |
-            ${{github.workspace}}/coverage.lcov:lcov
-          verifyDownload: true
