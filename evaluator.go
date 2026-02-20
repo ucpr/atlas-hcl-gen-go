@@ -28,15 +28,15 @@ func toSchemaEvaluatorFunc(target string) (schemahcl.EvalFunc, error) {
 // goTypeForColumn returns the Go type string for a given column,
 // applying a smart-null policy: nullable columns are pointers (except slices).
 func goTypeForColumn(c *schema.Column) string {
-    base := baseGoType(c.Type)
-    if c.Type != nil && c.Type.Null {
-        // Do not pointer-ize slices or json.RawMessage (alias of []byte).
-        if strings.HasPrefix(base, "[]") || base == "json.RawMessage" {
-            return base
-        }
-        return "*" + base
-    }
-    return base
+	base := baseGoType(c.Type)
+	if c.Type != nil && c.Type.Null {
+		// Do not pointer-ize slices or json.RawMessage (alias of []byte).
+		if strings.HasPrefix(base, "[]") || base == "json.RawMessage" {
+			return base
+		}
+		return "*" + base
+	}
+	return base
 }
 
 // baseGoType resolves a Go type for a column type without applying nullability wrapping.
