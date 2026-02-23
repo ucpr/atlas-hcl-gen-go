@@ -26,7 +26,7 @@ jobs:
           cache-dependency-path: ./go.sum
 
       - name: Run goreleaser
-        uses: goreleaser/goreleaser-action@v5.0.0
+        uses: goreleaser/goreleaser-action@v7.0.0
         with:
           args: release --clean
         env:
